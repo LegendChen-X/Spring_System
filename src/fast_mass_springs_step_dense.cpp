@@ -19,16 +19,12 @@ void fast_mass_springs_step_dense(
 {
   //////////////////////////////////////////////////////////////////////////////
   // Replace with your code
-    Eigen::MatrixXd d = Eigen::MatrixXd::Zero(E.rows(),3);
     Eigen::MatrixXd p = Ucur;
+    Eigen::MatrixXd d = Eigen::MatrixXd::Zero(E.rows(),3);
     const Eigen::MatrixXd l = Ucur;
     for(int iter = 0;iter<50;iter++)
     {
-        for(int i=0;i<r.size();++i)
-        {
-            Eigen::Vector3d difference = p.row(E(i,0)) - p.row(E(i,1));
-            d.row(i) = (r(i) * difference).normalized();
-        }
+        for(int i=0;i<r.size();++i) d.row(i) = r(i) * (p.row(E(i,0)) - p.row(E(i,1))).normalized();
         
         Eigen::MatrixXd y = 1 / (delta_t * delta_t) * M * (2 * Ucur - Uprev) + fext;
         
